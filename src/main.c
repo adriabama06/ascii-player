@@ -39,6 +39,9 @@ int main(int argc, const char* argv[])
 
     for (uint32_t i = 0; i < txt_files->length; i++)
     {
+        clock_t time_corrector;
+        time_corrector = clock();
+
         char* file = txt_files->data[i];
 
         char* file_input = (char*) malloc((options.input + strlen(file) + 2) * sizeof(char));
@@ -69,8 +72,19 @@ int main(int argc, const char* argv[])
 
         printf("%s\n", image_data);
         
-        custom_sleep(ms_frame_delay);
+        time_corrector = clock() - time_corrector;
 
+        uint32_t time_removed_by_calcs = (time_corrector / CLOCKS_PER_SEC);
+
+        if(ms_frame_delay < time_removed_by_calcs)
+        {
+            custom_sleep(ms_frame_delay);
+
+        }
+        else
+        {
+            custom_sleep(ms_frame_delay - time_removed_by_calcs);
+        }
         free(file_input);
         free(image_data);
     }
