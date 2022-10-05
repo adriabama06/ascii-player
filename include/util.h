@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <time.h>
 
-int custom_sleep(uint32_t /* miliseconds */);
+void custom_sleep(uint32_t /* miliseconds */);
 
 typedef struct STRING_ARRAY_STRUCT
 {
