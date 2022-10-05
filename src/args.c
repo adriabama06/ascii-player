@@ -33,7 +33,6 @@ PROGRAM_USER_INPUT parseArguments(int argc, const char *argv[])
             printf("  (Optional) --help - Show this help menu\n");
             printf("  -i - Input folder\n");
             printf("  -fps - Framerate in fps like: 24, 30, 60 or 23.976024, etc...\n");
-            printf("  (Optional) -p - HYPER EXPERIMENTAL Use main thread only for print and secondary thread for do all process\n");
 
             exit(0);
         }

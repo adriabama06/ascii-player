@@ -53,9 +53,7 @@ int main(int argc, const char* argv[])
 
         char* image_data = read_txt(file_input);
 
-        #ifdef _WIN32
-            printf("\n");
-        #else
+        #ifndef _WIN32
             clear_console();
         #endif
 
