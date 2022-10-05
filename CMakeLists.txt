@@ -14,13 +14,6 @@ set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 
 include(CPack)
 
-if(NOT WIN32)
-    set(THREADS_PREFER_PTHREAD_FLAG ON)
-    find_package(Threads REQUIRED)
-    target_link_libraries(image-of-characters-to-console PRIVATE Threads::Threads)
-endif(NOT WIN32)
-set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_BUILD_TYPE RelWithDebInfo)
 install(TARGETS image-of-characters-to-console DESTINATION bin)
 add_custom_target("uninstall" COMMENT "Uninstall installed files")
 add_custom_command(

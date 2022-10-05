@@ -22,7 +22,6 @@ PROGRAM_USER_INPUT parseArguments(int argc, const char *argv[])
 
     options.input = 0;
     options.fps = 0.0f;
-    options.preload = 0;
 
     for (int i = 1; i < argc; i++)
     {
@@ -63,18 +62,6 @@ PROGRAM_USER_INPUT parseArguments(int argc, const char *argv[])
             const char* value = argv[i];
 
             options.fps = atof(value);
-
-            continue;
-        }
-
-        if(strcmp(arg, "-p") == 0)
-        {
-            invalidArguments(i, argc);
-
-            i++;
-            const char* value = argv[i];
-
-            options.preload = atoi(value);
 
             continue;
         }

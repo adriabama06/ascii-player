@@ -4,8 +4,6 @@ typedef struct PROGRAM_USER_INPUT_STRUCT
     char* input_path;
 
     float fps;
-
-    int preload;
 } PROGRAM_USER_INPUT;
 
 void invalidArguments(int, int);
