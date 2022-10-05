@@ -41,9 +41,6 @@ int main(int argc, const char* argv[])
     {
         char* file = txt_files->data[i];
 
-        // printf("%d - %s\n", i, file);
-
-        // continue;
         char* file_input = (char*) malloc((options.input + strlen(file) + 2) * sizeof(char));
 
         strcpy(file_input, options.input_path);
@@ -64,10 +61,14 @@ int main(int argc, const char* argv[])
 
         char* image_data = read_txt(file_input);
 
-        clear_console();
+        #ifdef _WIN32
+            printf("\n");
+        #else
+            clear_console();
+        #endif
 
         printf("%s\n", image_data);
-
+        
         custom_sleep(ms_frame_delay);
 
         free(file_input);
