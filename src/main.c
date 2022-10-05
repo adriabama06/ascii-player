@@ -41,6 +41,9 @@ int main(int argc, const char* argv[])
     {
         char* file = txt_files->data[i];
 
+        // printf("%d - %s\n", i, file);
+
+        // continue;
         char* file_input = (char*) malloc((options.input + strlen(file) + 2) * sizeof(char));
 
         strcpy(file_input, options.input_path);

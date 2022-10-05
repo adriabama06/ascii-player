@@ -59,3 +59,23 @@ char* get_extension(char* file)
 
     return ext;
 }
+
+void sort_by_aplhabet(STRING_ARRAY* arr)
+{
+    for(int i = 0; i < arr->length; i++)
+    {
+        for(int j = i + 1; j < arr->length; j++)
+        {
+            if(strcmp(arr->data[i], arr->data[j]) > 0)
+            {
+                char* temp = (char*) malloc(strlen(arr->data[i]) * sizeof(char));
+
+                strcpy(temp, arr->data[i]);
+                strcpy(arr->data[i], arr->data[j]);
+                strcpy(arr->data[j], temp);
+
+                free(temp);
+            }
+        }
+    }
+}

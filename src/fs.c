@@ -54,5 +54,7 @@ STRING_ARRAY* search_txt(const char *dir)
 
     closedir(bmp_dir);
 
+    sort_by_aplhabet(strarr);
+
     return strarr;
 }

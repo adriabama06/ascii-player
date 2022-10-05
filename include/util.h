@@ -15,6 +15,8 @@ char* get_filename(char*);
 
 char* get_extension(char*);
 
+void sort_by_aplhabet(STRING_ARRAY*);
+
 int isDir(char*);
 
 STRING_ARRAY* search_txt(const char*);
