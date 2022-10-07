@@ -66,11 +66,7 @@ int main(int argc, const char* argv[])
 
         uint32_t time_removed_by_calcs = (time_corrector / CLOCKS_PER_SEC);
 
-        if(ms_frame_delay < time_removed_by_calcs)
-        {
-            custom_sleep(ms_frame_delay);
-        }
-        else
+        if(ms_frame_delay > time_removed_by_calcs)
         {
             custom_sleep(ms_frame_delay - time_removed_by_calcs);
         }
