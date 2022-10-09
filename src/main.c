@@ -9,6 +9,7 @@
 #ifdef _WIN32
     #include <windows.h>
 #else
+    #include <pthread.h>
     #include <unistd.h>
 #endif
 
@@ -26,51 +27,39 @@ int main(int argc, const char* argv[])
 
     STRING_ARRAY* txt_files = search_txt(options.input_path);
 
-    for (uint32_t i = 0; i < txt_files->length; i++)
+    uint32_t i = 0;
+    uint8_t end = 0;
+
+    THREAD_PRINT_TXT_ARGS args;
+
+    args.txt_files = txt_files;
+    args.base_input = options.input_path;
+    args.base_input_len = &options.input;
+    args.print_i = &i;
+    args.end = &end;
+
+    #ifdef _WIN32
+        HANDLE handle;
+
+        handle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) thread_print_txt, &args, 0, NULL);
+    #else
+        pthread_t handle;
+
+        pthread_create(&handle, NULL, thread_print_txt, &args);
+    #endif
+
+    for (; i < txt_files->length; i++)
     {
-        clock_t time_corrector;
-        time_corrector = clock();
-
-        char* file = txt_files->data[i];
-
-        char* file_input = (char*) malloc((options.input + strlen(file) + 2) * sizeof(char));
-
-        strcpy(file_input, options.input_path);
-
-        #ifdef _WIN32
-            if (endsWith(options.input_path, "\\") == 0)
-            {
-                strcat(file_input, "\\");
-            }
-        #else
-            if (endsWith(options.input_path, "/") == 0)
-            {
-                strcat(file_input, "/");
-            }
-        #endif
-
-        strcat(file_input, file);
-
-        char* image_data = read_txt(file_input);
-
-        #ifndef _WIN32
-            clear_console();
-        #endif
-
-        printf("%s\n", image_data);
-        
-        free(file_input);
-        free(image_data);
-
-        time_corrector = clock() - time_corrector;
-
-        uint32_t time_removed_by_calcs = (time_corrector / CLOCKS_PER_SEC);
-
-        if(ms_frame_delay > time_removed_by_calcs)
-        {
-            custom_sleep(ms_frame_delay - time_removed_by_calcs);
-        }
+        custom_sleep(ms_frame_delay);
     }
     
+    end = 1;
+
+    #ifdef _WIN32
+        WaitForSingleObject(handle, INFINITE);
+    #else
+        pthread_join(handle, NULL);
+    #endif
+
     return 0;
 }
