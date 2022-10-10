@@ -39,18 +39,34 @@ int main(int argc, const char* argv[])
     args.end = &end;
 
     #ifdef _WIN32
+        #define calc_win_time_to_ms(t) (t.wHour * 60 * 60 * 1000) + (t.wMinute * 60 * 1000) + (t.wSecond * 1000) + t.wMilliseconds
+
         HANDLE handle;
 
         handle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) thread_print_txt, &args, 0, NULL);
+
+        SYSTEMTIME start;
+        GetSystemTime(&start);
+        uint32_t start_pre_calc = calc_win_time_to_ms(start);
+
+        SYSTEMTIME current;
     #else
         pthread_t handle;
 
         pthread_create(&handle, NULL, thread_print_txt, &args);
+
+        clock_t start = clock();
     #endif
 
-    for (; i < txt_files->length; i++)
+    while (i < txt_files->length)
     {
-        custom_sleep(ms_frame_delay);
+        #ifdef _WIN32
+            GetSystemTime(&current);
+
+            i = ((calc_win_time_to_ms(current)) - start_pre_calc) / ms_frame_delay;
+        #else
+            i = (clock() - start) / ms_frame_delay;
+        #endif
     }
     
     end = 1;
