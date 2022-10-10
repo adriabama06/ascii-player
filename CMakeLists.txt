@@ -12,6 +12,12 @@ target_include_directories(ascii-player PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 
+if(NOT WIN32)
+    set(THREADS_PREFER_PTHREAD_FLAG ON)
+    find_package(Threads REQUIRED)
+    target_link_libraries(ascii-player PRIVATE Threads::Threads)
+endif(NOT WIN32)
+
 include(CPack)
 
 install(TARGETS ascii-player DESTINATION bin)
