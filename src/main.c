@@ -10,7 +10,7 @@
     #include <windows.h>
 #else
     #include <pthread.h>
-    #include <unistd.h>
+    #include <time.h>
 #endif
 
 int main(int argc, const char* argv[])
@@ -23,7 +23,12 @@ int main(int argc, const char* argv[])
 
     PROGRAM_USER_INPUT options = parseArguments(argc, argv);
 
-    uint32_t ms_frame_delay = 1000 / options.fps;
+    #ifdef _WIN32
+        uint32_t ms_frame_delay = 1000 / options.fps;
+    #else
+        uint32_t ms_frame_delay = 1000000 / (options.fps / 2);
+
+    #endif
 
     STRING_ARRAY* txt_files = search_txt(options.input_path);
 
@@ -65,7 +70,9 @@ int main(int argc, const char* argv[])
 
             i = ((calc_win_time_to_ms(current)) - start_pre_calc) / ms_frame_delay;
         #else
-            i = (clock() - start) / ms_frame_delay;
+            clock_t current = clock();
+            
+            i = (current - start) / ms_frame_delay;
         #endif
     }
     
