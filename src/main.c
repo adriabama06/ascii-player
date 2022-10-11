@@ -26,7 +26,7 @@ int main(int argc, const char* argv[])
     #ifdef _WIN32
         uint32_t ms_frame_delay = 1000 / options.fps;
     #else
-        uint32_t ms_frame_delay = 1000000 / (options.fps / 2);
+        uint32_t ms_frame_delay = 1000000 / options.fps;
 
     #endif
 
