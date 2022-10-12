@@ -77,11 +77,15 @@ int main(int argc, const char* argv[])
             i = (current - start) / frame_delay;
         #endif
 
-        //if(i != last_i)
-        //{
-        //    last_i = i;
-        //    printf("%d - %d = %d / %d => %d\n", calc_win_time_to_ms(current), start_pre_calc, (calc_win_time_to_ms(current) - start_pre_calc), frame_delay, i);
-        //}
+        if(i != last_i)
+        {
+            last_i = i;
+            #ifdef _WIN32
+                printf("%d - %d = %d / %d => %d\n", calc_win_time_to_ms(current), start_pre_calc, (calc_win_time_to_ms(current) - start_pre_calc), frame_delay, i);
+            #else
+                printf("%d - %d = %d / %d => %d\n", current, start, (current - start), frame_delay, i);
+            #endif
+        }
     }
     
     end = 1;
