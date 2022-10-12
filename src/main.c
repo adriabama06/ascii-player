@@ -10,6 +10,7 @@
     #include <windows.h>
 #else
     #include <pthread.h>
+    #include <sys/time.h>
     #include <time.h>
 #endif
 
@@ -23,12 +24,7 @@ int main(int argc, const char* argv[])
 
     PROGRAM_USER_INPUT options = parseArguments(argc, argv);
 
-    #ifdef _WIN32
-        uint32_t frame_delay = 1000000 / options.fps;
-    #else
-        uint32_t frame_delay = 1000000 / options.fps;
-
-    #endif
+    uint32_t frame_delay = 1000000 / options.fps;
 
     STRING_ARRAY* txt_files = search_txt(options.input_path);
 
@@ -56,14 +52,31 @@ int main(int argc, const char* argv[])
 
         SYSTEMTIME current;
     #else
+        #define timeval_to_nanoseconds(t) ((t.tv_sec * 1000000) + t.tv_usec)
+
         pthread_t handle;
 
         pthread_create(&handle, NULL, thread_print_txt, &args);
 
-        clock_t start = clock();
+        struct timeval start;
+        gettimeofday(&start, NULL);
+        #ifdef __UINT64_TYPE__
+            uint64_t start_pre_calc = timeval_to_nanoseconds(start);
+            #ifdef DEBUG_TYPE
+                printf("Using uint64_t\n");
+            #endif
+        #else
+            #ifdef DEBUG_TYPE
+                printf("Not precalculating start time because the computer don't support uint64_t\n");
+            #endif
+        #endif
+
+        struct timeval current;
     #endif
 
-    uint32_t last_i = 0;
+    #ifdef DEBUG_TIME
+        uint32_t last_i = 0;
+    #endif
 
     while (i < txt_files->length)
     {
@@ -72,20 +85,26 @@ int main(int argc, const char* argv[])
 
             i = (((calc_win_time_to_ms(current)) - start_pre_calc) * 1000) / frame_delay;
         #else
-            clock_t current = clock();
+            gettimeofday(&current, NULL);
             
-            i = (current - start) / frame_delay;
+            #ifdef __UINT64_TYPE__
+                i = (timeval_to_nanoseconds(current) - start_pre_calc) / frame_delay;
+            #else
+                i = (timeval_to_nanoseconds(current) - timeval_to_nanoseconds(start)) / frame_delay;
+            #endif
         #endif
 
-        if(i != last_i)
-        {
-            last_i = i;
-            #ifdef _WIN32
-                printf("%d - %d = %d / %d => %d\n", calc_win_time_to_ms(current), start_pre_calc, (calc_win_time_to_ms(current) - start_pre_calc), frame_delay, i);
-            #else
-                printf("%d - %d = %d / %d => %d\n", current, start, (current - start), frame_delay, i);
-            #endif
-        }
+        #ifdef DEBUG_TIME
+            if(i != last_i)
+            {
+                last_i = i;
+                #ifdef _WIN32
+                    printf("%d - %d = %d / %d => %d\n", calc_win_time_to_ms(current), start_pre_calc, (calc_win_time_to_ms(current) - start_pre_calc), frame_delay, i);
+                #else
+                    printf("%d - %d = %d / %d => %d\n", timeval_to_nanoseconds(current), timeval_to_nanoseconds(start), (timeval_to_nanoseconds(current) - timeval_to_nanoseconds(start)), frame_delay, i);
+                #endif
+            }
+        #endif
     }
     
     end = 1;

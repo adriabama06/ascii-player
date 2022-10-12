@@ -18,6 +18,9 @@ if(NOT WIN32)
     target_link_libraries(ascii-player PRIVATE Threads::Threads)
 endif(NOT WIN32)
 
+# add_compile_definitions(DEBUG_TIME) # If you have problems for playback speed enable this and check the time calculated
+# add_compile_definitions(DEBUG_TYPE) # Check if you computer is unsing x32 or x64 variables during execution
+
 include(CPack)
 
 install(TARGETS ascii-player DESTINATION bin)
