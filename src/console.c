@@ -58,10 +58,10 @@ void* thread_print_txt(void* __data)
         char* image_data = read_txt(file_input);
 
         #ifdef _WIN32
-            for (uint8_t i = 0; i < (csbi.dwSize.X / 3); i++)
-            {
-                putchar('\n');
-            }
+            //for (uint8_t i = 0; i < (csbi.dwSize.X / 3); i++)
+            //{
+            //    putchar('\n');
+            //}
         #else
             clear_console();
         #endif
