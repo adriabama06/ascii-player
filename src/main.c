@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
 #include <string.h>
 
 #ifdef _WIN32
@@ -13,6 +14,12 @@
     #include <sys/time.h>
     #include <time.h>
 #endif
+
+void intHandler(int dummy) {
+    show_cursor();
+
+    exit(0);
+}
 
 int main(int argc, const char* argv[])
 {
@@ -38,6 +45,10 @@ int main(int argc, const char* argv[])
     args.base_input_len = &options.input;
     args.print_i = &i;
     args.end = &end;
+
+    signal(SIGINT, intHandler);
+
+    hide_cursor();
 
     #ifdef _WIN32
         #define calc_win_time_to_ms(t) (t.wHour * 60 * 60 * 1000) + (t.wMinute * 60 * 1000) + (t.wSecond * 1000) + t.wMilliseconds
@@ -114,6 +125,8 @@ int main(int argc, const char* argv[])
     #else
         pthread_join(handle, NULL);
     #endif
+
+    show_cursor();
 
     return 0;
 }

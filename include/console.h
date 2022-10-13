@@ -16,3 +16,6 @@ typedef struct thread_print_txt_args_s
 void clear_console();
 
 void* thread_print_txt(void* /* THREAD_PRINT_TXT_ARGS */);
+
+void hide_cursor();
+void show_cursor();
