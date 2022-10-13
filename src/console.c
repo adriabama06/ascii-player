@@ -57,16 +57,15 @@ void* thread_print_txt(void* __data)
 
         char* image_data = read_txt(file_input);
 
-        #ifdef _WIN32
-            //for (uint8_t i = 0; i < (csbi.dwSize.X / 3); i++)
-            //{
-            //    putchar('\n');
-            //}
-        #else
+        #ifndef _WIN32
             clear_console();
         #endif
 
         printf("%s", image_data);
+        
+        #ifdef _WIN32
+            putchar('\n');
+        #endif
         
         free(file_input);
         free(image_data);
