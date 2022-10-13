@@ -63,10 +63,6 @@ void* thread_print_txt(void* __data)
 
         printf("%s", image_data);
         
-        #ifdef _WIN32
-            putchar('\n');
-        #endif
-        
         free(file_input);
         free(image_data);
 
