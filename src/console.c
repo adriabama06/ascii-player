@@ -52,14 +52,12 @@ void* thread_print_txt(void* __data)
 
         char* image_data = read_txt(file_input);
 
-        #ifndef _WIN32
-            clear_console();
-        #endif
-
-        printf("%s", image_data);
-        
         #ifdef _WIN32
-            putchar('\n');
+            printf("%s\n", image_data);
+        #else
+            clear_console();
+
+            printf("%s", image_data);
         #endif
 
         free(file_input);
