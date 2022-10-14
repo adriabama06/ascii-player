@@ -21,11 +21,6 @@ void* thread_print_txt(void* __data)
 
     size_t base_input_len = strlen(data->base_input);
 
-    #ifdef _WIN32
-        CONSOLE_SCREEN_BUFFER_INFO csbi;
-        GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-    #endif
-
     uint32_t last_i = 0;
 
     while (*data->end == 0)
